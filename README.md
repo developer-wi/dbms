@@ -46,9 +46,9 @@ The following environment variables need to be defined in a `.env.dev` file:
 
    ```bash
    ./run.sh
-````
 
 4. The master database will be accessible on port `13306`, and the slave database will be accessible on port `13307`.
+````
 
 ## Scripts
 
