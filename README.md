@@ -7,22 +7,6 @@ This project sets up a MySQL master-slave replication environment using Docker. 
 - Docker
 - Docker Compose
 
-## Directory Structure
-
-├── docker-compose.yml \n
-├── mysql
-│ ├── master
-│ │ ├── config
-│ │ │ └── my.cnf
-│ │ └── scripts
-│ │ └── docker-entrypoint-master.sh
-│ └── slave
-│ ├── config
-│ │ └── my.cnf
-│ └── scripts
-│ └── docker-entrypoint-slave.sh
-└── run.sh
-
 ````
 
 ## Environment Variables
