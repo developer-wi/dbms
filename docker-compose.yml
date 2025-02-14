@@ -1,0 +1,59 @@
+version: "3"
+services:
+  db-master:
+    image: mariadb:10.6.3-focal
+    container_name: mysql-master
+    build:
+      context: ./mysql/master/
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_REPL_USER_ID: ${MYSQL_REPL_USER_ID}
+      MYSQL_REPL_USER_PASSWORD: ${MYSQL_REPL_USER_PASSWORD}
+    ports:
+      - "13306:3306"
+    volumes:
+      - volume-master:/var/lib/mysql
+      - ./mysql/master/scripts:/docker-entrypoint-initdb.d
+      - ./mysql/master/config:/etc/mysql/conf.d
+    networks:
+      net-mysql:
+        ipv4_address: ${MYSQL_MASTER_HOST}
+
+  db-slave:
+    image: mariadb:10.6.3-focal
+    container_name: mysql-slave
+    build:
+      context: ./mysql/slave
+    restart: always
+    environment:
+      MYSQL_MASTER_HOST: ${MYSQL_MASTER_HOST}
+      MYSQL_MASTER_PORT: ${MYSQL_MASTER_PORT}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_REPL_USER_ID: ${MYSQL_REPL_USER_ID}
+      MYSQL_REPL_USER_PASSWORD: ${MYSQL_REPL_USER_PASSWORD}
+      MYSQL_USER_ID: ${MYSQL_USER_ID}
+      MYSQL_USER_PASSWORD: ${MYSQL_USER_PASSWORD}
+      MYSQL_DB: ${MYSQL_DB}
+
+    ports:
+      - "13307:3306"
+    volumes:
+      - volume-slave:/var/lib/mysql
+      - ./mysql/slave/scripts:/docker-entrypoint-initdb.d
+      - ./mysql/slave/config:/etc/mysql/conf.d
+    networks:
+      net-mysql:
+        ipv4_address: 172.28.0.3
+    depends_on:
+      - db-master
+
+volumes:
+  volume-master:
+  volume-slave:
+networks:
+  net-mysql:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
