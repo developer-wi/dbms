@@ -9,7 +9,7 @@ This project sets up a MySQL master-slave replication environment using Docker. 
 
 ## Directory Structure
 
-├── docker-compose.yml
+├── docker-compose.yml \n
 ├── mysql
 │ ├── master
 │ │ ├── config
